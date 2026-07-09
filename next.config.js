@@ -247,7 +247,8 @@ const nextConfig = {
     minimumCacheTTL: 60 * 60 * 24 * 7, // 7天
     // 危险的允许SVG
     dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    unoptimized: true
   },
 
   // 默认将feed重定向至 /public/rss/feed.xml

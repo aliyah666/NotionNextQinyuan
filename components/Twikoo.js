@@ -13,7 +13,7 @@ const Twikoo = ({ isDarkMode }) => {
   const envId = siteConfig('COMMENT_TWIKOO_ENV_ID')
   const el = siteConfig('COMMENT_TWIKOO_ELEMENT_ID', '#twikoo')
   const twikooCDNURL = siteConfig('COMMENT_TWIKOO_CDN_URL')
-  const lang = siteConfig('LANG')
+  const lang = 'zh-CN'
   const [isInit] = useState(useRef(false))
 
   const loadTwikoo = async () => {

@@ -1,5 +1,8 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "headers": []
+  "headers": [],
+  "redirects": [
+    { "source": "/hotel", "destination": "/hotel-calendar.html", "permanent": true }
+  ]
 }

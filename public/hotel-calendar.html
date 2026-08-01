@@ -56,7 +56,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .t5{background:#e74c3c;}
 .t6{background:#f39c12;}
 .t7{background:#7f8c8d;}
-.em{font-size:10px;color:#aaa;padding:0 3px;}
+.em{font-size:10px;color:#aaa;padding:0 3px;cursor:pointer;}
+.em:hover{color:#4a90d9;}
 
 /* 右侧 */
 .side{width:310px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;}
@@ -105,6 +106,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .modal .msrc a{color:#4a90d9;}
 .modal .mad{background:#fff8e1;padding:12px;border-radius:8px;border-left:3px solid #f0a500;font-size:13px;color:#5d4037;line-height:1.7;}
 
+/* 事件列表弹窗 */
+.list-mask{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:210;justify-content:center;align-items:center;}
+.list-mask.show{display:flex;}
+.list-modal{background:#fff;border-radius:14px;padding:20px;max-width:400px;width:92%;box-shadow:0 16px 48px rgba(0,0,0,0.15);max-height:70vh;overflow-y:auto;position:relative;}
+.list-modal .x{position:absolute;top:12px;right:16px;border:none;background:none;font-size:22px;cursor:pointer;color:#999;}
+.list-modal .x:hover{color:#333;}
+.list-modal .ltitle{font-size:16px;font-weight:700;margin-bottom:12px;padding-right:24px;}
+.list-modal .litem{display:flex;align-items:center;gap:8px;padding:10px 8px;border-bottom:1px solid #f0f0f0;cursor:pointer;border-radius:6px;}
+.list-modal .litem:hover{background:#f0f4ff;}
+.list-modal .litem:last-child{border-bottom:none;}
+.list-modal .ltag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;color:#fff;flex-shrink:0;}
+.list-modal .lname{font-size:14px;color:#333;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
 /* 平板 */
 @media(max-width:860px){
   .wrap{flex-direction:column;padding:8px;gap:8px;width:100%;}
@@ -150,6 +164,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   .cal-nav button{width:24px;height:24px;font-size:13px;}
   .cal-nav .bt{font-size:10px;height:24px;padding:0 8px;}
   .wdays span{font-size:9px;padding:3px 0;}
+  .list-modal{padding:14px;border-radius:10px;}
+  .list-modal .litem{padding:8px 6px;}
+  .list-modal .lname{font-size:13px;}
 }
 </style>
 </head>
@@ -200,6 +217,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
   </div>
 </div>
 
+<!-- 事件详情弹窗 -->
 <div class="mask" id="mk" onclick="cm(event)">
   <div class="modal" onclick="event.stopPropagation()">
     <button class="x" onclick="cm()">&times;</button>
@@ -211,6 +229,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <div class="mr" id="ms"></div>
     <div class="msrc" id="msrc"></div>
     <div class="mad" id="mad"></div>
+  </div>
+</div>
+
+<!-- 事件列表弹窗 -->
+<div class="list-mask" id="lmk" onclick="hideList(event)">
+  <div class="list-modal" onclick="event.stopPropagation()">
+    <button class="x" onclick="hideList()">&times;</button>
+    <div class="ltitle" id="ltitle"></div>
+    <div id="llist"></div>
   </div>
 </div>
 
@@ -420,6 +447,7 @@ function C(n, ds, io, ts) {
       var m = document.createElement('div');
       m.className = 'em';
       m.textContent = '+' + (evs.length - 3) + ' 条更多';
+      m.onclick = function(evt) { evt.stopPropagation(); ODL(ds); };
       evd.appendChild(m);
     }
     div.appendChild(evd);
@@ -430,7 +458,31 @@ function C(n, ds, io, ts) {
   return div;
 }
 
-// ========== 弹窗 ==========
+// ========== 事件列表弹窗 ==========
+function ODL(ds) {
+  var evs = GD(ds);
+  document.getElementById('ltitle').textContent = ds + ' 全部事件（' + evs.length + '）';
+  var list = document.getElementById('llist');
+  list.innerHTML = '';
+  evs.forEach(function(e) {
+    var item = document.createElement('div');
+    item.className = 'litem';
+    item.innerHTML = '<span class="ltag ' + e.t + '">' + e.l + '</span><span class="lname">' + e.tt + '</span>';
+    item.onclick = function() {
+      hideList();
+      OD(e);
+    };
+    list.appendChild(item);
+  });
+  document.getElementById('lmk').classList.add('show');
+}
+
+function hideList(e) {
+  if (e && e.target !== document.getElementById('lmk')) return;
+  document.getElementById('lmk').classList.remove('show');
+}
+
+// ========== 事件详情弹窗 ==========
 function OD(ev) {
   document.getElementById('mt').className = 'mtag ' + ev.t;
   document.getElementById('mt').textContent = ev.l;

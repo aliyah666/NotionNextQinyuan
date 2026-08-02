@@ -135,7 +135,7 @@ function FE() {
   return allEvents.filter(function(e) {
     if (!activeFilters.has(e.t)) return false;
     if (pv !== '全部' && e.province !== pv) return false;
-    if (cv !== '全部' && e.city !== cv) return false;
+    if (cv !== '全部' && e.city !== cv && e.city !== '全区') return false;
     return true;
   });
 }

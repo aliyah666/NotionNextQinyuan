@@ -3,14 +3,13 @@
  * 无需爬取，每年更新一次数据即可
  * 
  * 数据来源: 国务院办公厅节假日安排通知
+ * 城市设为"全区"表示全省适用，不过滤到具体城市
  */
 
 module.exports = async function () {
   const year = new Date().getFullYear();
   const events = [];
 
-  // ========== 法定节假日（2026年） ==========
-  // 每年初根据国务院通知更新
   const holidays = [
     {
       title: '元旦假期',
@@ -56,53 +55,37 @@ module.exports = async function () {
     }
   ];
 
-  // 为每个节假日生成广西各城市的事件
-  const cities = ['南宁', '桂林', '柳州', '北海', '玉林', '百色', '梧州', '防城港', '钦州', '贵港', '贺州', '河池', '来宾', '崇左'];
-
   holidays.forEach(h => {
-    cities.forEach(city => {
-      events.push({
-        title: h.title,
-        date: h.date,
-        province: '广西',
-        city: city,
-        type: '节庆',
-        location: city,
-        summary: h.summary,
-        analysis: h.analysis
-      });
+    events.push({
+      title: h.title,
+      date: h.date,
+      province: '广西',
+      city: '全区',
+      type: '节庆',
+      summary: h.summary,
+      analysis: h.analysis
     });
   });
 
-  // ========== 寒暑假（仅教育核心城市） ==========
-  const eduCities = ['南宁', '桂林', '柳州'];
-
-  // 寒假
-  eduCities.forEach(city => {
-    events.push({
-      title: '中小学寒假开始',
-      date: `${year}-01-15`,
-      province: '广西',
-      city: city,
-      type: '其他',
-      location: city,
-      summary: '中小学寒假，家庭出游需求增加',
-      analysis: '关注亲子酒店和家庭房需求'
-    });
+  // 寒暑假（仅标记，不生成多城市）
+  events.push({
+    title: '中小学寒假开始',
+    date: `${year}-01-15`,
+    province: '广西',
+    city: '全区',
+    type: '其他',
+    summary: '中小学寒假，家庭出游需求增加',
+    analysis: '关注亲子酒店和家庭房需求'
   });
 
-  // 暑假
-  eduCities.forEach(city => {
-    events.push({
-      title: '中小学暑假开始',
-      date: `${year}-07-01`,
-      province: '广西',
-      city: city,
-      type: '其他',
-      location: city,
-      summary: '中小学暑假开始，旅游旺季',
-      analysis: '暑期是旅游酒店旺季，建议提前做好价格策略'
-    });
+  events.push({
+    title: '中小学暑假开始',
+    date: `${year}-07-01`,
+    province: '广西',
+    city: '全区',
+    type: '其他',
+    summary: '中小学暑假开始，旅游旺季',
+    analysis: '暑期是旅游酒店旺季，建议提前做好价格策略'
   });
 
   return events;

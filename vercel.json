@@ -2,9 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [],
-  "redirects": [
-    { "source": "/hotel", "destination": "/hotel-calendar.html", "permanent": true }
-  ],
+  "redirects": [],
   "crons": [
     {
       "path": "/api/cron",

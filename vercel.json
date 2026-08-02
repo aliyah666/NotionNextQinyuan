@@ -4,5 +4,11 @@
   "headers": [],
   "redirects": [
     { "source": "/hotel", "destination": "/hotel-calendar.html", "permanent": true }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron",
+      "schedule": "0 0 * * *"
+    }
   ]
 }
